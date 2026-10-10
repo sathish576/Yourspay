@@ -1,0 +1,2187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Yourspay | Employee Payroll CRM</title>
+
+<style>
+
+:root {
+    --primary:#0a2540;
+    --accent:#00d4b2;
+    --light:#f5f7fa;
+    --white:#fff;
+    --dark:#263238;
+    --danger:#dc3545;
+    --border:#d9e1e8;
+    --warning:#ffc107;
+}
+
+/* =========================
+   GENERAL
+========================= */
+
+* {
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    font-family:Segoe UI,Arial,sans-serif;
+}
+
+body {
+    background:var(--light);
+    color:var(--dark);
+}
+
+.container {
+    width:92%;
+    max-width:1400px;
+    margin:30px auto;
+}
+
+/* =========================
+   NAVBAR
+========================= */
+
+nav {
+    background:var(--primary);
+    color:white;
+    padding:16px 5%;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.logo {
+    font-size:25px;
+    font-weight:bold;
+}
+
+.logo span {
+    color:var(--accent);
+}
+
+nav a {
+    color:white;
+    text-decoration:none;
+    margin-left:20px;
+}
+
+/* =========================
+   HEADER
+========================= */
+
+.header {
+    background:linear-gradient(135deg,#0a2540,#164a78);
+    color:white;
+    padding:45px 5%;
+}
+
+.header h1 {
+    margin-bottom:8px;
+}
+
+/* =========================
+   CARD
+========================= */
+
+.card {
+    background:white;
+    padding:25px;
+    border-radius:10px;
+    box-shadow:0 4px 15px rgba(0,0,0,.08);
+    margin-bottom:25px;
+}
+
+.card h2 {
+    color:var(--primary);
+    margin-bottom:20px;
+    border-bottom:2px solid var(--accent);
+    padding-bottom:10px;
+}
+
+/* =========================
+   FORM
+========================= */
+
+.form-grid {
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:18px;
+}
+
+.form-group label {
+    display:block;
+    font-weight:600;
+    margin-bottom:6px;
+}
+
+.form-group input,
+.form-group select {
+    width:100%;
+    padding:11px;
+    border:1px solid var(--border);
+    border-radius:5px;
+    font-size:15px;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    outline:none;
+    border-color:var(--accent);
+}
+
+/* =========================
+   EMPLOYEE CODE
+========================= */
+
+.employee-code {
+    background:#e8fff9 !important;
+    font-weight:bold;
+    color:#008c78;
+}
+
+/* =========================
+   SALARY
+========================= */
+
+.salary-box {
+    background:#f8fafc;
+    padding:20px;
+    margin-top:25px;
+    border-radius:8px;
+}
+
+.salary-grid {
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:15px;
+}
+
+.salary-item {
+    background:white;
+    padding:15px;
+    border-radius:6px;
+    border-left:4px solid var(--accent);
+}
+
+.salary-item strong {
+    display:block;
+    color:#666;
+    font-size:13px;
+}
+
+.salary-item span {
+    font-size:20px;
+    font-weight:bold;
+}
+
+/* =========================
+   BUTTONS
+========================= */
+
+.buttons {
+    margin-top:25px;
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+}
+
+button {
+    border:none;
+    padding:12px 22px;
+    border-radius:5px;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+.save-btn {
+    background:var(--accent);
+    color:var(--primary);
+}
+
+.reset-btn {
+    background:#6c757d;
+    color:white;
+}
+
+.print-btn {
+    background:var(--primary);
+    color:white;
+}
+
+.delete-btn {
+    background:var(--danger);
+    color:white;
+    padding:7px 12px;
+}
+
+.edit-btn {
+    background:var(--warning);
+    color:#000;
+    padding:7px 12px;
+}
+
+button:hover {
+    opacity:.9;
+}
+
+/* =========================
+   TABLE
+========================= */
+
+.table-wrapper {
+    overflow-x:auto;
+}
+
+table {
+    width:100%;
+    border-collapse:collapse;
+    min-width:1100px;
+}
+
+th {
+    background:var(--primary);
+    color:white;
+    padding:12px;
+    text-align:left;
+}
+
+td {
+    padding:11px;
+    border-bottom:1px solid #ddd;
+}
+
+tr:hover {
+    background:#f8fafc;
+}
+
+/* =========================
+   FOOTER
+========================= */
+
+footer {
+    background:var(--primary);
+    color:white;
+    text-align:center;
+    padding:20px;
+    margin-top:40px;
+}
+
+/* =========================
+   PRINT PAYROLL
+========================= */
+
+.print-payroll {
+    display:none;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:1000px) {
+
+    .form-grid,
+    .salary-grid {
+        grid-template-columns:repeat(2,1fr);
+    }
+
+}
+
+@media(max-width:600px) {
+
+    .form-grid,
+    .salary-grid {
+        grid-template-columns:1fr;
+    }
+
+    nav {
+        flex-direction:column;
+        gap:15px;
+    }
+
+    nav div:last-child {
+        text-align:center;
+    }
+
+}
+
+/* =================================================
+   PRINT ONLY EMPLOYEE PAYROLL SLIP
+================================================= */
+
+@media print {
+
+    @page {
+        size:A4;
+        margin:15mm;
+    }
+
+    body {
+        background:white !important;
+    }
+
+    body * {
+        visibility:hidden;
+    }
+
+    #printPayroll,
+    #printPayroll * {
+        visibility:visible;
+    }
+
+    #printPayroll {
+        display:block;
+        position:absolute;
+        left:0;
+        top:0;
+        width:100%;
+        background:white;
+        color:#000;
+        padding:5px;
+    }
+
+    .print-header {
+        text-align:center;
+        border-bottom:2px solid #000;
+        padding-bottom:15px;
+        margin-bottom:20px;
+    }
+
+    .print-header h1 {
+        font-size:28px;
+        margin-bottom:5px;
+    }
+
+    .print-header p {
+        font-size:14px;
+    }
+
+    .employee-details {
+        display:grid;
+        grid-template-columns:1fr 1fr;
+        border:1px solid #000;
+        margin-bottom:25px;
+    }
+
+    .employee-details div {
+        padding:10px;
+        border-bottom:1px solid #000;
+    }
+
+    .employee-details div:nth-child(odd) {
+        border-right:1px solid #000;
+    }
+
+    .print-payroll h3 {
+        margin-top:20px;
+        margin-bottom:10px;
+        border-bottom:1px solid #000;
+        padding-bottom:7px;
+    }
+
+    .print-table {
+        width:100%;
+        border-collapse:collapse;
+        min-width:0;
+    }
+
+    .print-table td {
+        border:1px solid #000;
+        padding:10px;
+    }
+
+    .print-table td:first-child {
+        font-weight:500;
+    }
+
+    .print-table td:last-child {
+        text-align:right;
+    }
+
+    .print-table .total {
+        font-weight:bold;
+    }
+
+    .print-table .net {
+        font-weight:bold;
+        font-size:18px;
+        border-top:2px solid #000;
+    }
+
+    .print-footer {
+        margin-top:70px;
+        display:flex;
+        justify-content:space-between;
+    }
+
+    .print-footer div {
+        text-align:center;
+        width:40%;
+    }
+
+}
+
+/* =================================================
+   END PRINT
+================================================= */
+
+</style>
+</head>
+
+<body>
+
+<!-- =========================
+     NAVIGATION
+========================= -->
+
+<nav>
+
+    <div class="logo">
+        Yourspay<span> Payroll</span>
+    </div>
+
+    <div>
+        <a href="#">Dashboard</a>
+        <a href="#employee">Employee</a>
+        <a href="#payroll">Payroll</a>
+        <a href="#records">Records</a>
+    </div>
+
+</nav>
+
+
+<!-- =========================
+     HEADER
+========================= -->
+
+<section class="header">
+
+    <h1>Employee Payroll Management</h1>
+
+    <p>
+        Manage employee information, salary, allowances and payroll records.
+    </p>
+
+</section>
+
+
+<div class="container">
+
+
+<!-- =================================================
+     EMPLOYEE FORM
+================================================= -->
+
+<div class="card" id="employee">
+
+    <h2>Employee Information</h2>
+
+    <form id="payrollForm">
+
+        <div class="form-grid">
+
+            <!-- EMPLOYEE CODE -->
+
+            <div class="form-group">
+
+                <label>Employee Code</label>
+
+                <input
+                    type="text"
+                    id="employeeCode"
+                    class="employee-code"
+                    readonly
+                >
+
+            </div>
+
+
+            <!-- EMPLOYEE NAME -->
+
+            <div class="form-group">
+
+                <label>Employee Name</label>
+
+                <input
+                    type="text"
+                    id="employeeName"
+                    placeholder="Enter employee name"
+                    required
+                >
+
+            </div>
+
+
+            <!-- DESIGNATION -->
+
+            <div class="form-group">
+
+                <label>Designation</label>
+
+                <select id="designation">
+
+                    <option value="">
+                        Select Designation
+                    </option>
+
+                    <option>Manager</option>
+                    <option>Assistant Manager</option>
+                    <option>HR Executive</option>
+                    <option>Accountant</option>
+                    <option>Front Office Executive</option>
+                    <option>Tele Caller</option>
+                    <option>Field Officer</option>
+                    <option>Collection Executive</option>
+                    <option>Cashier</option>
+                    <option>Office Assistant</option>
+
+                </select>
+
+            </div>
+
+
+            <!-- DEPARTMENT -->
+
+            <div class="form-group">
+
+                <label>Department</label>
+
+                <select id="department">
+
+                    <option value="">
+                        Select Department
+                    </option>
+
+                    <option>Administration</option>
+                    <option>Human Resources</option>
+                    <option>Accounts</option>
+                    <option>Finance</option>
+                    <option>Operations</option>
+                    <option>Marketing</option>
+                    <option>Collection</option>
+                    <option>Customer Service</option>
+                    <option>IT</option>
+
+                </select>
+
+            </div>
+
+
+            <!-- PAY DATE -->
+
+            <div class="form-group">
+
+                <label>Pay Date</label>
+
+                <input
+                    type="date"
+                    id="payDate"
+                >
+
+            </div>
+
+
+            <!-- BRANCH -->
+
+            <div class="form-group">
+
+                <label>Branch</label>
+
+                <select id="branch">
+
+                    <option value="">
+                        Select Branch
+                    </option>
+
+                    <option>Salem</option>
+                    <option>Dharmapuri</option>
+                    <option>Attur</option>
+
+                </select>
+
+            </div>
+
+
+            <!-- REPORTING PERSON -->
+
+            <div class="form-group">
+
+                <label>Reporting Person</label>
+
+                <input
+                    type="text"
+                    id="reportingPerson"
+                    placeholder="Reporting person name"
+                >
+
+            </div>
+
+
+            <!-- REPORTING DESIGNATION -->
+
+            <div class="form-group">
+
+                <label>Reporting Person Designation</label>
+
+                <select id="reportingDesignation">
+
+                    <option value="">
+                        Select Designation
+                    </option>
+
+                    <option>Branch Manager</option>
+                    <option>Area Manager</option>
+                    <option>Regional Manager</option>
+                    <option>HR Manager</option>
+                    <option>General Manager</option>
+                    <option>Director</option>
+
+                </select>
+
+            </div>
+
+
+            <!-- GRADE -->
+
+            <div class="form-group">
+
+                <label>Grade</label>
+
+                <select id="grade">
+
+                    <option value="">
+                        Select Grade
+                    </option>
+
+                    <option>A</option>
+                    <option>B</option>
+                    <option>C</option>
+                    <option>D</option>
+
+                </select>
+
+            </div>
+
+
+            <!-- PAY DAYS -->
+
+            <div class="form-group">
+
+                <label>Pay Days</label>
+
+                <input
+                    type="number"
+                    id="payDays"
+                    value="30"
+                    min="0"
+                    oninput="calculateSalary()"
+                >
+
+            </div>
+
+
+            <!-- PAID DAYS -->
+
+            <div class="form-group">
+
+                <label>Paid Days</label>
+
+                <input
+                    type="number"
+                    id="paidDays"
+                    value="30"
+                    min="0"
+                    oninput="calculateSalary()"
+                >
+
+            </div>
+
+
+            <!-- LOP -->
+
+            <div class="form-group">
+
+                <label>LOP Days</label>
+
+                <input
+                    type="number"
+                    id="lop"
+                    value="0"
+                    min="0"
+                    oninput="calculateSalary()"
+                >
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             SALARY
+        ================================================= -->
+
+        <div class="salary-box" id="payroll">
+
+            <h2>Salary Details</h2>
+
+            <div class="form-grid">
+
+
+                <!-- BASIC -->
+
+                <div class="form-group">
+
+                    <label>Basic Salary</label>
+
+                    <input
+                        type="number"
+                        id="basic"
+                        value="15000"
+                        oninput="calculateSalary()"
+                    >
+
+                </div>
+
+
+                <!-- HRA -->
+
+                <div class="form-group">
+
+                    <label>HRA</label>
+
+                    <input
+                        type="number"
+                        id="hra"
+                        value="3000"
+                        oninput="calculateSalary()"
+                    >
+
+                </div>
+
+
+                <!-- INCENTIVE -->
+
+                <div class="form-group">
+
+                    <label>Incentive</label>
+
+                    <input
+                        type="number"
+                        id="Incentive"
+                        value="1000"
+                        oninput="calculateSalary()"
+                    >
+
+                </div>
+
+
+                <!-- OTHER ALLOWANCE -->
+
+                <div class="form-group">
+
+                    <label>Other Allowance</label>
+
+                    <input
+                        type="number"
+                        id="otherAllowance"
+                        value="0"
+                        oninput="calculateSalary()"
+                    >
+
+                </div>
+
+
+                <!-- PF -->
+
+                <div class="form-group">
+
+                    <label>PF Deduction</label>
+
+                    <input
+                        type="number"
+                        id="pf"
+                        value="0"
+                        oninput="calculateSalary()"
+                    >
+
+                </div>
+
+
+                <!-- ESI -->
+
+                <div class="form-group">
+
+                    <label>ESI Deduction</label>
+
+                    <input
+                        type="number"
+                        id="esi"
+                        value="0"
+                        oninput="calculateSalary()"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <!-- CALCULATED SALARY -->
+
+            <div class="salary-grid">
+
+
+                <div class="salary-item">
+
+                    <strong>Gross Salary</strong>
+
+                    <span id="grossSalary">
+                        ₹19,000
+                    </span>
+
+                </div>
+
+
+                <div class="salary-item">
+
+                    <strong>Total Deduction</strong>
+
+                    <span id="totalDeduction">
+                        ₹0
+                    </span>
+
+                </div>
+
+
+                <div class="salary-item">
+
+                    <strong>LOP Deduction</strong>
+
+                    <span id="lopAmount">
+                        ₹0
+                    </span>
+
+                </div>
+
+
+                <div class="salary-item">
+
+                    <strong>Net Salary</strong>
+
+                    <span id="netSalary">
+                        ₹19,000
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             BUTTONS
+        ================================================= -->
+
+        <div class="buttons">
+
+            <button
+                type="button"
+                class="save-btn"
+                onclick="saveEmployee()"
+            >
+                Save Employee
+            </button>
+
+
+            <button
+                type="button"
+                class="reset-btn"
+                onclick="resetForm()"
+            >
+                New Employee
+            </button>
+
+
+            <button
+                type="button"
+                class="print-btn"
+                onclick="printPayroll()"
+            >
+                Print Payroll
+            </button>
+
+        </div>
+
+    </form>
+
+</div>
+
+
+<!-- =================================================
+     EMPLOYEE RECORDS
+================================================= -->
+
+<div class="card employee-list" id="records">
+
+    <h2>Employee Payroll Records</h2>
+
+    <div class="table-wrapper">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>Employee Code</th>
+                    <th>Employee Name</th>
+                    <th>Designation</th>
+                    <th>Department</th>
+                    <th>Branch</th>
+                    <th>Grade</th>
+                    <th>Basic</th>
+                    <th>Gross</th>
+                    <th>PF</th>
+                    <th>ESI</th>
+                    <th>Net Salary</th>
+                    <th>Action</th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody id="employeeTableBody">
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+</div>
+
+
+<!-- =================================================
+     FOOTER
+================================================= -->
+
+<footer>
+
+    <p>
+        © 2026 Yourspay | Employee Payroll Management System
+    </p>
+
+</footer>
+
+
+<!-- =================================================
+     PRINT-ONLY PAYROLL SLIP
+================================================= -->
+
+<div id="printPayroll" class="print-payroll">
+
+    <div class="print-header">
+
+        <h1>Yourspay Payroll</h1>
+
+        <p>
+            Employee Salary Statement
+        </p>
+
+    </div>
+
+
+    <!-- EMPLOYEE DETAILS -->
+
+    <div class="employee-details">
+
+        <div>
+            <strong>Employee Code:</strong>
+            <span id="pCode"></span>
+        </div>
+
+        <div>
+            <strong>Employee Name:</strong>
+            <span id="pName"></span>
+        </div>
+
+        <div>
+            <strong>Designation:</strong>
+            <span id="pDesignation"></span>
+        </div>
+
+        <div>
+            <strong>Department:</strong>
+            <span id="pDepartment"></span>
+        </div>
+
+        <div>
+            <strong>Branch:</strong>
+            <span id="pBranch"></span>
+        </div>
+
+        <div>
+            <strong>Grade:</strong>
+            <span id="pGrade"></span>
+        </div>
+
+        <div>
+            <strong>Pay Date:</strong>
+            <span id="pPayDate"></span>
+        </div>
+
+        <div>
+            <strong>Reporting Person:</strong>
+            <span id="pReportingPerson"></span>
+        </div>
+
+        <div>
+            <strong>Reporting Designation:</strong>
+            <span id="pReportingDesignation"></span>
+        </div>
+
+        <div>
+            <strong>Pay Days:</strong>
+            <span id="pPayDays"></span>
+        </div>
+
+        <div>
+            <strong>Paid Days:</strong>
+            <span id="pPaidDays"></span>
+        </div>
+
+        <div>
+            <strong>LOP Days:</strong>
+            <span id="pLopDays"></span>
+        </div>
+
+    </div>
+
+
+    <!-- SALARY -->
+
+    <h3>
+        Salary Details
+    </h3>
+
+
+    <table class="print-table">
+
+        <tr>
+            <td>Basic Salary</td>
+            <td id="pBasic"></td>
+        </tr>
+
+        <tr>
+            <td>HRA</td>
+            <td id="pHra"></td>
+        </tr>
+
+        <tr>
+            <td>Incentive</td>
+            <td id="pIncentive"></td>
+        </tr>
+
+        <tr>
+            <td>Other Allowance</td>
+            <td id="pOther"></td>
+        </tr>
+
+        <tr class="total">
+            <td>Gross Salary</td>
+            <td id="pGross"></td>
+        </tr>
+
+        <tr>
+            <td>PF Deduction</td>
+            <td id="pPf"></td>
+        </tr>
+
+        <tr>
+            <td>ESI Deduction</td>
+            <td id="pEsi"></td>
+        </tr>
+
+        <tr>
+            <td>LOP Deduction</td>
+            <td id="pLop"></td>
+        </tr>
+
+        <tr class="net">
+            <td>NET SALARY</td>
+            <td id="pNet"></td>
+        </tr>
+
+    </table>
+
+
+    <!-- SIGNATURES -->
+
+    <div class="print-footer">
+
+        <div>
+
+            <p>
+                Employee Signature
+            </p>
+
+            <br><br>
+
+            ______________________
+
+        </div>
+
+
+        <div>
+
+            <p>
+                Authorized Signature
+            </p>
+
+            <br><br>
+
+            ______________________
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =================================================
+     JAVASCRIPT
+================================================= -->
+
+<script>
+
+/* =================================================
+   EMPLOYEE CODE GENERATOR
+================================================= */
+
+function generateEmployeeCode() {
+
+    let employees =
+        JSON.parse(localStorage.getItem("employees")) || [];
+
+    /*
+       Find highest existing employee number.
+       This prevents duplicate codes after deleting employees.
+    */
+
+    let highest = 0;
+
+    employees.forEach(function(employee) {
+
+        if (employee.code) {
+
+            let match =
+                employee.code.match(/YSP(\d+)/);
+
+            if (match) {
+
+                let number =
+                    parseInt(match[1]);
+
+                if (number > highest) {
+                    highest = number;
+                }
+
+            }
+
+        }
+
+    });
+
+    let nextNumber = highest + 1;
+
+    let code =
+        "YSP" +
+        String(nextNumber).padStart(4,"0");
+
+    document.getElementById("employeeCode").value =
+        code;
+}
+
+
+/* =================================================
+   SALARY CALCULATION
+================================================= */
+
+function calculateSalary() {
+
+    let basic =
+        parseFloat(
+            document.getElementById("basic").value
+        ) || 0;
+
+
+    let hra =
+        parseFloat(
+            document.getElementById("hra").value
+        ) || 0;
+
+
+    let incentive =
+        parseFloat(
+            document.getElementById("Incentive").value
+        ) || 0;
+
+
+    let other =
+        parseFloat(
+            document.getElementById("otherAllowance").value
+        ) || 0;
+
+
+    let pf =
+        parseFloat(
+            document.getElementById("pf").value
+        ) || 0;
+
+
+    let esi =
+        parseFloat(
+            document.getElementById("esi").value
+        ) || 0;
+
+
+    let payDays =
+        parseFloat(
+            document.getElementById("payDays").value
+        ) || 0;
+
+
+    let paidDays =
+        parseFloat(
+            document.getElementById("paidDays").value
+        ) || 0;
+
+
+    let lop =
+        parseFloat(
+            document.getElementById("lop").value
+        ) || 0;
+
+
+    /*
+       Gross Salary
+    */
+
+    let gross =
+        basic +
+        hra +
+        incentive +
+        other;
+
+
+    /*
+       Daily Salary
+    */
+
+    let dailySalary =
+        payDays > 0
+        ? gross / payDays
+        : 0;
+
+
+    /*
+       LOP Deduction
+    */
+
+    let lopAmount =
+        dailySalary * lop;
+
+
+    /*
+       Total Deduction
+    */
+
+    let totalDeduction =
+        pf +
+        esi +
+        lopAmount;
+
+
+    /*
+       Net Salary
+    */
+
+    let netSalary =
+        gross -
+        totalDeduction;
+
+
+    /*
+       Display
+    */
+
+    document.getElementById("grossSalary").innerText =
+        formatCurrency(gross);
+
+
+    document.getElementById("totalDeduction").innerText =
+        formatCurrency(totalDeduction);
+
+
+    document.getElementById("lopAmount").innerText =
+        formatCurrency(lopAmount);
+
+
+    document.getElementById("netSalary").innerText =
+        formatCurrency(netSalary);
+}
+
+
+/* =================================================
+   CURRENCY FORMAT
+================================================= */
+
+function formatCurrency(amount) {
+
+    return new Intl.NumberFormat(
+        "en-IN",
+        {
+            style:"currency",
+            currency:"INR",
+            maximumFractionDigits:2
+        }
+    ).format(
+        parseFloat(amount) || 0
+    );
+}
+
+
+/* =================================================
+   SAVE EMPLOYEE
+================================================= */
+
+function saveEmployee() {
+
+    calculateSalary();
+
+
+    let employee = {
+
+        code:
+            document.getElementById("employeeCode").value,
+
+        name:
+            document.getElementById("employeeName").value,
+
+        designation:
+            document.getElementById("designation").value,
+
+        department:
+            document.getElementById("department").value,
+
+        payDate:
+            document.getElementById("payDate").value,
+
+        branch:
+            document.getElementById("branch").value,
+
+        reportingPerson:
+            document.getElementById("reportingPerson").value,
+
+        reportingDesignation:
+            document.getElementById("reportingDesignation").value,
+
+        grade:
+            document.getElementById("grade").value,
+
+        payDays:
+            document.getElementById("payDays").value,
+
+        paidDays:
+            document.getElementById("paidDays").value,
+
+        lop:
+            document.getElementById("lop").value,
+
+        basic:
+            document.getElementById("basic").value,
+
+        hra:
+            document.getElementById("hra").value,
+
+        incentive:
+            document.getElementById("Incentive").value,
+
+        otherAllowance:
+            document.getElementById("otherAllowance").value,
+
+        pf:
+            document.getElementById("pf").value,
+
+        esi:
+            document.getElementById("esi").value,
+
+        gross:
+            document.getElementById("grossSalary").innerText,
+
+        totalDeduction:
+            document.getElementById("totalDeduction").innerText,
+
+        lopAmount:
+            document.getElementById("lopAmount").innerText,
+
+        net:
+            document.getElementById("netSalary").innerText
+
+    };
+
+
+    if (!employee.name.trim()) {
+
+        alert(
+            "Please enter Employee Name."
+        );
+
+        return;
+    }
+
+
+    let employees =
+        JSON.parse(
+            localStorage.getItem("employees")
+        ) || [];
+
+
+    /*
+       Check if editing
+    */
+
+    let form =
+        document.getElementById("payrollForm");
+
+    let editIndex =
+        form.dataset.editIndex;
+
+
+    if (
+        editIndex !== undefined &&
+        editIndex !== ""
+    ) {
+
+        employees[
+            parseInt(editIndex)
+        ] = employee;
+
+
+        delete form.dataset.editIndex;
+
+
+        alert(
+            "Employee updated successfully."
+        );
+
+    } else {
+
+        employees.push(employee);
+
+
+        alert(
+            "Employee saved successfully."
+        );
+
+    }
+
+
+    localStorage.setItem(
+        "employees",
+        JSON.stringify(employees)
+    );
+
+
+    loadEmployees();
+
+    resetForm();
+}
+
+
+/* =================================================
+   LOAD EMPLOYEES
+================================================= */
+
+function loadEmployees() {
+
+    let employees =
+        JSON.parse(
+            localStorage.getItem("employees")
+        ) || [];
+
+
+    let table =
+        document.getElementById(
+            "employeeTableBody"
+        );
+
+
+    table.innerHTML = "";
+
+
+    employees.forEach(
+        function(employee,index) {
+
+            let row =
+                document.createElement("tr");
+
+
+            row.innerHTML = `
+
+                <td>
+                    <strong>
+                        ${employee.code}
+                    </strong>
+                </td>
+
+                <td>
+                    ${escapeHTML(employee.name)}
+                </td>
+
+                <td>
+                    ${escapeHTML(employee.designation)}
+                </td>
+
+                <td>
+                    ${escapeHTML(employee.department)}
+                </td>
+
+                <td>
+                    ${escapeHTML(employee.branch)}
+                </td>
+
+                <td>
+                    ${escapeHTML(employee.grade)}
+                </td>
+
+                <td>
+                    ${formatCurrency(employee.basic)}
+                </td>
+
+                <td>
+                    ${employee.gross}
+                </td>
+
+                <td>
+                    ${formatCurrency(employee.pf)}
+                </td>
+
+                <td>
+                    ${formatCurrency(employee.esi)}
+                </td>
+
+                <td>
+                    <strong>
+                        ${employee.net}
+                    </strong>
+                </td>
+
+                <td>
+
+                    <button
+                        class="edit-btn"
+                        onclick="editEmployee(${index})"
+                    >
+                        Edit
+                    </button>
+
+                    <button
+                        class="delete-btn"
+                        onclick="deleteEmployee(${index})"
+                    >
+                        Delete
+                    </button>
+
+                    <button
+                        class="print-btn"
+                        style="padding:7px 12px;margin-top:5px;"
+                        onclick="printEmployee(${index})"
+                    >
+                        Print
+                    </button>
+
+                </td>
+
+            `;
+
+
+            table.appendChild(row);
+
+        }
+    );
+}
+
+
+/* =================================================
+   HTML ESCAPE
+================================================= */
+
+function escapeHTML(value) {
+
+    if (value === undefined ||
+        value === null) {
+
+        return "";
+    }
+
+    return String(value)
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+}
+
+
+/* =================================================
+   EDIT EMPLOYEE
+================================================= */
+
+function editEmployee(index) {
+
+    let employees =
+        JSON.parse(
+            localStorage.getItem("employees")
+        ) || [];
+
+
+    let employee =
+        employees[index];
+
+
+    if (!employee) {
+        return;
+    }
+
+
+    document.getElementById(
+        "employeeCode"
+    ).value = employee.code;
+
+
+    document.getElementById(
+        "employeeName"
+    ).value = employee.name;
+
+
+    document.getElementById(
+        "designation"
+    ).value = employee.designation;
+
+
+    document.getElementById(
+        "department"
+    ).value = employee.department;
+
+
+    document.getElementById(
+        "payDate"
+    ).value = employee.payDate;
+
+
+    document.getElementById(
+        "branch"
+    ).value = employee.branch;
+
+
+    document.getElementById(
+        "reportingPerson"
+    ).value = employee.reportingPerson;
+
+
+    document.getElementById(
+        "reportingDesignation"
+    ).value =
+        employee.reportingDesignation;
+
+
+    document.getElementById(
+        "grade"
+    ).value = employee.grade;
+
+
+    document.getElementById(
+        "payDays"
+    ).value = employee.payDays;
+
+
+    document.getElementById(
+        "paidDays"
+    ).value = employee.paidDays;
+
+
+    document.getElementById(
+        "lop"
+    ).value = employee.lop;
+
+
+    document.getElementById(
+        "basic"
+    ).value = employee.basic;
+
+
+    document.getElementById(
+        "hra"
+    ).value = employee.hra;
+
+
+    document.getElementById(
+        "Incentive"
+    ).value = employee.incentive;
+
+
+    document.getElementById(
+        "otherAllowance"
+    ).value = employee.otherAllowance;
+
+
+    document.getElementById(
+        "pf"
+    ).value = employee.pf;
+
+
+    document.getElementById(
+        "esi"
+    ).value = employee.esi;
+
+
+    document.getElementById(
+        "payrollForm"
+    ).dataset.editIndex = index;
+
+
+    calculateSalary();
+
+
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
+
+}
+
+
+/* =================================================
+   DELETE EMPLOYEE
+================================================= */
+
+function deleteEmployee(index) {
+
+    if (
+        !confirm(
+            "Are you sure you want to delete this employee?"
+        )
+    ) {
+
+        return;
+    }
+
+
+    let employees =
+        JSON.parse(
+            localStorage.getItem("employees")
+        ) || [];
+
+
+    employees.splice(index,1);
+
+
+    localStorage.setItem(
+        "employees",
+        JSON.stringify(employees)
+    );
+
+
+    loadEmployees();
+
+    generateEmployeeCode();
+
+}
+
+
+/* =================================================
+   PRINT CURRENT FORM EMPLOYEE
+================================================= */
+
+function printPayroll() {
+
+    calculateSalary();
+
+
+    fillPrintData({
+
+        code:
+            document.getElementById(
+                "employeeCode"
+            ).value,
+
+        name:
+            document.getElementById(
+                "employeeName"
+            ).value,
+
+        designation:
+            document.getElementById(
+                "designation"
+            ).value,
+
+        department:
+            document.getElementById(
+                "department"
+            ).value,
+
+        branch:
+            document.getElementById(
+                "branch"
+            ).value,
+
+        grade:
+            document.getElementById(
+                "grade"
+            ).value,
+
+        payDate:
+            document.getElementById(
+                "payDate"
+            ).value,
+
+        reportingPerson:
+            document.getElementById(
+                "reportingPerson"
+            ).value,
+
+        reportingDesignation:
+            document.getElementById(
+                "reportingDesignation"
+            ).value,
+
+        payDays:
+            document.getElementById(
+                "payDays"
+            ).value,
+
+        paidDays:
+            document.getElementById(
+                "paidDays"
+            ).value,
+
+        lop:
+            document.getElementById(
+                "lop"
+            ).value,
+
+        basic:
+            document.getElementById(
+                "basic"
+            ).value,
+
+        hra:
+            document.getElementById(
+                "hra"
+            ).value,
+
+        incentive:
+            document.getElementById(
+                "Incentive"
+            ).value,
+
+        otherAllowance:
+            document.getElementById(
+                "otherAllowance"
+            ).value,
+
+        pf:
+            document.getElementById(
+                "pf"
+            ).value,
+
+        esi:
+            document.getElementById(
+                "esi"
+            ).value,
+
+        gross:
+            document.getElementById(
+                "grossSalary"
+            ).innerText,
+
+        lopAmount:
+            document.getElementById(
+                "lopAmount"
+            ).innerText,
+
+        net:
+            document.getElementById(
+                "netSalary"
+            ).innerText
+
+    });
+
+
+    window.print();
+}
+
+
+/* =================================================
+   PRINT EMPLOYEE FROM TABLE
+================================================= */
+
+function printEmployee(index) {
+
+    let employees =
+        JSON.parse(
+            localStorage.getItem("employees")
+        ) || [];
+
+
+    let employee =
+        employees[index];
+
+
+    if (!employee) {
+        return;
+    }
+
+
+    fillPrintData(employee);
+
+
+    window.print();
+}
+
+
+/* =================================================
+   FILL PRINT DATA
+================================================= */
+
+function fillPrintData(employee) {
+
+    document.getElementById(
+        "pCode"
+    ).innerText =
+        employee.code || "";
+
+
+    document.getElementById(
+        "pName"
+    ).innerText =
+        employee.name || "";
+
+
+    document.getElementById(
+        "pDesignation"
+    ).innerText =
+        employee.designation || "";
+
+
+    document.getElementById(
+        "pDepartment"
+    ).innerText =
+        employee.department || "";
+
+
+    document.getElementById(
+        "pBranch"
+    ).innerText =
+        employee.branch || "";
+
+
+    document.getElementById(
+        "pGrade"
+    ).innerText =
+        employee.grade || "";
+
+
+    document.getElementById(
+        "pPayDate"
+    ).innerText =
+        employee.payDate || "";
+
+
+    document.getElementById(
+        "pReportingPerson"
+    ).innerText =
+        employee.reportingPerson || "";
+
+
+    document.getElementById(
+        "pReportingDesignation"
+    ).innerText =
+        employee.reportingDesignation || "";
+
+
+    document.getElementById(
+        "pPayDays"
+    ).innerText =
+        employee.payDays || "";
+
+
+    document.getElementById(
+        "pPaidDays"
+    ).innerText =
+        employee.paidDays || "";
+
+
+    document.getElementById(
+        "pLopDays"
+    ).innerText =
+        employee.lop || "0";
+
+
+    document.getElementById(
+        "pBasic"
+    ).innerText =
+        formatCurrency(employee.basic);
+
+
+    document.getElementById(
+        "pHra"
+    ).innerText =
+        formatCurrency(employee.hra);
+
+
+    document.getElementById(
+        "pIncentive"
+    ).innerText =
+        formatCurrency(
+            employee.incentive
+        );
+
+
+    document.getElementById(
+        "pOther"
+    ).innerText =
+        formatCurrency(
+            employee.otherAllowance
+        );
+
+
+    document.getElementById(
+        "pGross"
+    ).innerText =
+        employee.gross || "₹0";
+
+
+    document.getElementById(
+        "pPf"
+    ).innerText =
+        formatCurrency(employee.pf);
+
+
+    document.getElementById(
+        "pEsi"
+    ).innerText =
+        formatCurrency(employee.esi);
+
+
+    document.getElementById(
+        "pLop"
+    ).innerText =
+        employee.lopAmount || "₹0";
+
+
+    document.getElementById(
+        "pNet"
+    ).innerText =
+        employee.net || "₹0";
+
+}
+
+
+/* =================================================
+   RESET FORM
+================================================= */
+
+function resetForm() {
+
+    let form =
+        document.getElementById(
+            "payrollForm"
+        );
+
+
+    form.reset();
+
+
+    delete form.dataset.editIndex;
+
+
+    document.getElementById(
+        "payDays"
+    ).value = 30;
+
+
+    document.getElementById(
+        "paidDays"
+    ).value = 30;
+
+
+    document.getElementById(
+        "lop"
+    ).value = 0;
+
+
+    document.getElementById(
+        "basic"
+    ).value = 15000;
+
+
+    document.getElementById(
+        "hra"
+    ).value = 3000;
+
+
+    document.getElementById(
+        "Incentive"
+    ).value = 1000;
+
+
+    document.getElementById(
+        "otherAllowance"
+    ).value = 0;
+
+
+    document.getElementById(
+        "pf"
+    ).value = 0;
+
+
+    document.getElementById(
+        "esi"
+    ).value = 0;
+
+
+    generateEmployeeCode();
+
+    calculateSalary();
+
+}
+
+
+/* =================================================
+   INITIAL LOAD
+================================================= */
+
+window.onload = function() {
+
+    generateEmployeeCode();
+
+    calculateSalary();
+
+    loadEmployees();
+
+};
+
+</script>
+
+</body>
+</html>
